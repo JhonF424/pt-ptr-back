@@ -16,11 +16,12 @@ import com.prueba.proteccion.pruebaTecnicaBackend.repositories.FibonacciReposito
 public class FibonacciService {
 
     private final FibonacciRepository fibonacciRepository;
-
+    private final MailService mailService;
 
     @Autowired
-    public FibonacciService(FibonacciRepository fibonacciRepository) {
+    public FibonacciService(FibonacciRepository fibonacciRepository, MailService mailService) {
         this.fibonacciRepository = fibonacciRepository;
+        this.mailService = mailService;
     }
 
     /**
@@ -88,7 +89,15 @@ public class FibonacciService {
         );
     
         FibonacciSequence savedSequence = fibonacciRepository.save(fibonacciSequence);
-    
+        
+        String body = String.format(
+        "Secuencia generada:\nHora: %02d:%02d:%02d\nSemillas: %d, %d\nCantidad: %d\nSecuencia: %s",
+        hour, minute, second, seedX, seedY, count, sequence.toString()
+        );
+
+        mailService.sendFibonacciEmail("jfrancogp02@gmail.com", "Resultado de Fibonacci", body);
+        // TODO: Revisar por qué no llegan los correos a pesar de recibir un 202
+
         return savedSequence;
     }
     

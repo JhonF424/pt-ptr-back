@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class FibonacciServiceTest {
@@ -17,7 +18,8 @@ public class FibonacciServiceTest {
     @Test
     public void testProcessTimeRequest_GeneratesCorrectSequenceAndSavesIt() {
         FibonacciRepository mockRepository = Mockito.mock(FibonacciRepository.class);
-        FibonacciService service = new FibonacciService(mockRepository);
+        MailService mockMailService = Mockito.mock(MailService.class);
+        FibonacciService service = new FibonacciService(mockRepository, mockMailService);
 
         int hour = 12;
         int minute = 34; // seedX = 3, seedY = 4
